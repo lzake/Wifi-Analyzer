@@ -12,7 +12,6 @@ function checkKill() {
     fetch('/checkkill/kill', {
         method: 'get'
     }).then(function (response) {
-        document.getElementById('info').innerHTML = response;
         console.log(response);
     }).catch(function (err) {
         console.log(err);
