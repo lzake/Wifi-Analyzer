@@ -4,6 +4,8 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const CsvReadableStream = require('csv-reader');
+const csv = require("fast-csv");
 const cors = require('cors');
 const index = require('./routes/index');
 const checkkill = require('./routes/checkkill');
@@ -23,13 +25,29 @@ app.use('/airodwlan1', airodwlan1)
 app.use('/checkinterface', checkInterface);
 
 router.get('/', function (req, res) {
-} )
+})
 
-router.all('/*', function(req, res, next) {
+router.all('/*', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'X-Requested-Width');
     next();
-}) 
+})
+
+setInterval(function () {
+    var csvData = {};
+    var date = new Date();
+    if (date.getSeconds() === 0) {
+       csv
+        .fromPath("/home/pi/Desktop/scanData/-01.csv")
+        .on("data", function(data){
+            console.log(data);
+        })
+        .on("end", function(){
+            console.log("done");
+        });
+    }
+}, 1000);
+
 
 app.listen(port);
 module.exports = app;
